@@ -1,13 +1,15 @@
 #!bin/bash -e
 
+# You can change port and nat
+mtproxy_port=8900
+nat="10.146.0.2:104.198.122.132"
+
 mtproxy_path="/usr/local/mtproxy"
 mtproxy_file="/usr/local/mtproxy/mtproto-proxy"
 mtproxy_conf="/usr/local/mtproxy/mtproxy.conf"
 mtproxy_secret="/usr/local/mtproxy/proxy-secret"
 mtproxy_multi="/usr/local/mtproxy/proxy-multi.conf"
 mtproxy_service="/etc/systemd/system/MTProxy.service"
-mtproxy_port=8900
-nat="10.146.0.2:104.198.122.132"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
@@ -129,11 +131,11 @@ Output_mtproxy() {
 
 Install_mtproxy() {
 	# install dependencies
-	#apt install git curl build-essential libssl-dev zlib1g-dev
+	apt install git curl build-essential libssl-dev zlib1g-dev
 
-	#Download_mtproxy
-	#Download_secret
-	#Download_multi_config
+	Download_mtproxy
+	Download_secret
+	Download_multi_config
 
 	Generate_passwd
 
