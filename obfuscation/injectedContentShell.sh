@@ -1,0 +1,254 @@
+#!/bin/bash
+#
+# 批量注入混淆代码
+#
+
+# mark: TODO 配置文件
+# 注入内容配置文件
+cfg_file="$(pwd)/configures/injectedContentConfig.cfg"
+# 需要混淆的目标目录
+cfg_dirs="$(pwd)/configures/fileDirs_base.cfg"
+
+function warning() {
+	echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[32m $1 \033[0m"
+}
+
+function err() {
+	echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[31m $1 \033[0m"
+}
+
+function info() {
+	echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[32m $1 \033[0m"
+}
+
+function printHighlightMessage() {
+	#mark: echo 颜色选项 http://www.jb51.net/article/43968.htm
+	echo -e "\033[31m $1 \033[0m"
+}
+
+# 递归遍历读取目录下的所有.m文件
+function read_implement_file_recursively() {
+	echo "read_implement_file_recursively"
+	echo $1
+	if [[ -d $1 ]]; then
+		for item in $(ls $1); do
+			item_path="$1/${item}"
+			if [[ -d $item_path ]]; then
+				# 目录
+				echo "处理目录 ${item_path}"
+				read_implement_file_recursively $item_path
+				echo "处理目录结束====="
+			else 
+				# 文件
+				if [[ $(expr "$item" : '.*\.m') -gt 0 ]]; then
+					echo "处理文件 ${item_path}"
+					echo ">>>>>>>>>>>>mmmmmmm"
+					implement_source_file_array[$implement_source_file_count]=${item_path}
+					implement_source_file_count=$[ implement_source_file_count + 1 ];
+				fi
+			fi
+		done
+	else
+		err "err:不是一个目录"
+	fi
+}
+
+# 处理目标文件，添加配置文件中注入的内容
+function inject_content() {
+	injected_content_index=0
+	for(( i=0;i<${#implement_source_file_array[@]};i++)) 
+	do 
+		file=${implement_source_file_array[i]}; 
+		echo ${file}
+
+		injected_content=${config_content_array[$injected_content_index]};
+		injected_content_index=$[ $injected_content_index + 1 ]
+		if [[ injected_content_index -ge ${#config_content_array[@]} ]]; then
+			injected_content_index=0;
+		fi
+		echo ">>>>>>>${injected_content}  #${injected_content_index}"
+
+		# mark: sed 命令中使用变量 http://blog.csdn.net/lepton126/article/details/36374933
+		# 在匹配的行下面添加插入内容
+		#sed -i '/^- \(.*\){$/{
+		#	a\ '"$injected_content"'
+		#}' ${file}
+
+		sed -i '/^- \(.*\)/{
+            :tag1;
+            N;
+            /{$/!b tag1;
+            a\ '"$injected_content"'
+        }' ${file}
+
+		#sed -i '/^- \(.*\)/{
+		#	:tag1;
+ 		#	N;
+ 		#	/{$/!b tag1;
+ 		#	a '"$injected_content"'
+		#}' ${file}
+
+	done;
+	message="内容添加完成"
+	printHighlightMessage $message
+}
+
+# 处理目标文件，删除配置文件中注入的内容
+function removeInjectedContent {
+	for(( i=0;i<${#implement_source_file_array[@]};i++)) 
+	do 
+		file=${implement_source_file_array[i]}; 
+		echo ${file}
+
+		for(( j=0;j<${#config_content_array[@]};j++)) 
+		do 
+			pattern_str=${config_content_array[$j]};
+			echo ">>>>>>>${pattern_str}"
+
+			# mark: sed 命令中使用变量 http://blog.csdn.net/lepton126/article/details/36374933
+			substring="["
+			replacement="\["
+			pattern_str=${pattern_str//$substring/$replacement}
+			substring="]"
+			replacement="\]"
+			pattern_str=${pattern_str//$substring/$replacement}
+			echo "pattern_str = $pattern_str"
+			#pattern_str="[CardDataComposer new]"
+
+			sed -i '/'"$pattern_str"'/ {
+				d
+			}' ${file}
+		done
+	done;
+	message="内容删除完成"
+	printHighlightMessage $message
+}
+
+
+function genMunu {
+	clear
+	echo
+	echo -e "\t\t\t选项菜单\n"
+	echo -e "\t1. 删除注入内容"
+	echo -e "\t2. 添加注入内容"
+	echo -e "\t0. Exit menu\n\n"
+	echo -en "\t\tEnter option: "
+	read -n 1 option
+}
+
+
+# 导入工具脚本
+. ./FileUtil.sh
+. ./EnvCheckUtil.sh
+
+# 检测gun sed
+gunSedInstallCheck
+
+
+# 检测 property_name_replace_dir
+#checkDirCore $to_process_file_dir "指定类文件搜索目录不存在"
+#to_process_file_dir=${CheckInputDestDirRecursiveReturnValue}
+
+# mark: p261
+# 配置文件检查
+if [[ -f $cfg_file ]]; then
+	echo "检测到配置文件存在 $cfg_file"
+else
+	echo "请确认配置文件是否存在 $cfg_file"
+	exit 1
+fi
+
+# 读取目录配置
+echo "开始读取目录配置..."
+
+declare -a dir_array
+dir_line_count=0
+
+for line in $(cat $cfg_dirs)
+do
+	echo '****'
+	echo ${line}
+	if [[ ${#line} -eq 0 ]]; then
+		echo "blank line"
+	else
+		dir_array[$dir_line_count]=$line
+	fi
+	dir_line_count=$[ $dir_line_count + 1 ]
+done
+
+# 读取配置文件
+echo "开始读取配置文件..."
+
+declare -a config_content_array
+cfg_line_count=0
+# mark: p291
+IFS_OLD=$IFS
+IFS=$'\n'
+# 删除文件行首的空白字符 http://www.jb51.net/article/57972.htm
+#for line in $(cat $cfg_file | sed 's/^[ \t]*//g')
+
+# 不删除文件行首空白字符
+for line in $(cat $cfg_file)
+do
+	if [[ ${#line} -eq 0 ]]; then
+		echo "blank line"
+	else
+		config_content_array[$cfg_line_count]=$line
+	fi
+	cfg_line_count=$[ $cfg_line_count + 1 ]
+done
+IFS=${IFS_OLD}
+
+
+echo "-----"
+
+# 读取需要处理目标文件
+
+declare -a implement_source_file_array
+for(( k=0;k<${#dir_array[@]};k++)) 
+do
+	to_process_file_dir=${dir_array[$k]}
+	current_path=`dirname $(pwd)`
+	to_process_file_dir=${current_path}/${to_process_file_dir}
+	echo ${to_process_file_dir}
+	unset implement_source_file_array
+	implement_source_file_count=0
+	read_implement_file_recursively ${to_process_file_dir}
+
+	# 添加配置文件中注入的内容
+	addInjectedContent
+done
+
+#echo ${to_process_file_dir}
+#read_implement_file_recursively ${to_process_file_dir}
+#
+# while [[ 1 ]]; do
+# 	genMunu
+# 	case $option in
+# 	0 )
+# 		echo ""
+# 		echo "Bye"
+# 		exit 0
+# 	;;
+# 	1 )
+# 		# 删除配置文件中注入的内容
+# 		removeInjectedContent
+# 	;;
+# 	2 )
+# 		# 添加配置文件中注入的内容
+# 		addInjectedContent
+# 	;;
+# 	h )
+# 		genMunu
+# 	;;
+# 	* )
+# 		echo "Wrong!!"
+# 	;;
+# 	esac
+
+# 	echo
+# 	echo -en "\n\n\tHit any key to continue"
+# 	read -n 1 line
+# 
+# done
+

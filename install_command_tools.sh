@@ -15,3 +15,4 @@ function Install_vim_plugin_managers() {
 
 #brew install telnet
 Install_vim_plugin_managers
+brew install autojump
