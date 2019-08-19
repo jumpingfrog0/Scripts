@@ -45,3 +45,50 @@ checkOrCreateFile() {
 		touch $file
 	fi
 }
+
+####
+# 以下是新方法, 所有脚本完成以后，删除上的旧方法
+####
+
+# 检测文件是否存在，不存在则创建
+function check_or_create_file() {
+	file=$1
+	if [[ -f $file ]]; then
+		echo "检测到文件存在: $file"
+	else
+		echo "创建文件: $file"
+		touch $file
+	fi
+}
+
+function check_exist_file() {
+	file=$1
+	if [[ -f $file ]]; then
+		echo "检测到文件存在: $file"
+	else
+		echo "文件不存在: $file"
+		exit 1
+	fi
+}
+
+function check_file_exists() {
+	file=$1
+	if [[ -f $file ]]; then
+		return 1
+	else
+		return 0
+	fi
+}
+
+function check_file_exists_with_msg() {
+	file=$1
+	msg1=$2
+	msg2=$3
+	if [[ -f $file ]]; then
+		echo "${msg1} ${file}"
+		return 1
+	else
+		echo "${msg2} ${file}"
+		return 0
+	fi	
+}
