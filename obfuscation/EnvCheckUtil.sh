@@ -48,4 +48,30 @@ md5SumInstalCheck() {
 	fi
 }
 
+# 检测是否安装 home brew
+function check_install_brew() {
+	if [ ! `which brew` ]
+	then
+		echo 'Homebrew not found. Trying to install...'
+					ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" \
+			|| exit 1
+	fi
+}
+
+# 检测是否安装jq
+function check_install_jq() {
+	which_jq=`which jq`
+	echo $which_jq
+	echo "testresult = $(expr "$which_sed" : '.*/jq')"
+	if [[ $(expr "$which_jq" : '.*/jq') -gt 0 ]]; then
+		echo "检测到已经安装jq"
+	else
+		check_install_brew
+		echo "Trying to install jq..."
+		brew install jq || exit 1	
+		echo "Install jq Successfully."
+		printHighlightMessage "Please retry to run scrips."
+	fi
+}
+
 

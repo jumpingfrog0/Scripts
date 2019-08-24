@@ -92,3 +92,14 @@ function check_file_exists_with_msg() {
 		return 0
 	fi	
 }
+
+function check_file_exists_with_error_msg() {
+	file=$1
+	msg1=$2
+	if [[ -f $file ]]; then
+		return 1
+	else
+		echo "${msg1} ${file}"
+		exit 1
+	fi		
+}

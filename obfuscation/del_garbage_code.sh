@@ -314,7 +314,7 @@ patch_remove_ref_files
 
 # sed -e '1,${
 # 	/instanceF/d; 
-# 	/MELaunchTimeCostReport/d
+# 	/JFLaunchTimeCostReport/d
 # 		}' ${target_file}
 
 # sed -n '1,${

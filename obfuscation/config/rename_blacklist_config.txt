@@ -1,0 +1,16 @@
+{
+    "dirs":[
+        "111",
+        "222",
+        "code2/path1",
+        "code3",
+        "Pods",
+        "RevealDemoTests",
+        "RevealDemoUITests",
+        "scripts"
+    ],
+    "file": [
+        "MELike",
+        "MELike2"
+    ]
+}
