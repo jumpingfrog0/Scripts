@@ -26,14 +26,15 @@ gunSedInstallCheck() {
 				|| exit 1
 		fi
 		echo 'Trying to install gun sed...'
-		brew install gnu-sed --with-default-names || exit 1
+		brew install gnu-sed
 		# 设置局部环境变量
 		# echo "set PATH...."
 		# source ./set-gun-sed-path.sh
 		# echo "set PATH done"
 
 		echo "请手动执行命令,然后重新执行"
-		command="PATH=\"/usr/local/Cellar/gnu-sed/4.5/bin:\$PATH\""
+		# command="PATH=\"/usr/local/Cellar/gnu-sed/4.5/bin:\$PATH\""
+		export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 		printHighlightMessage $command
 		echo ""
 		exit 1
