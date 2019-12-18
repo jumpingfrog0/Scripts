@@ -1,1 +1,207 @@
-# todo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax on				" 语法高亮
+filetype plugin on		" 根据不同的文件类型语言加载不同插件（如，C++ 的语法高亮插件与python的不同）
+
+set nocompatible        " 关闭兼容模式 
+set number              " 显示行号
+set autoindent          " 自动对齐
+set smartindent         " 智能对齐
+set showmatch           " 括号匹配模式
+set ruler               " 显示状态行
+set incsearch           " 查询时非常方便，如要查找book单词，当输入到/b时，会自动找到   第一个b开头的单词，当输入到/bo时，会自动找到第一个bo开头的单词，依次类推，进行查找时，使用此设置会快速找到答案，当你找要匹配的单词时，别忘记回车.
+
+set cindent             " C语言格式对齐
+set nobackup            " 不要备份文件
+set clipboard+=unnamed	" 共享剪贴板
+
+" 1 tab == 4 spaces
+set tabstop=4
+set shiftwidth=4
+
+" 高亮显示当前行/列
+set cursorline			
+" set cursorcolumn
+
+" 与剪贴板共享复制粘贴
+let mapleader=";"
+vmap <Leader>y :w !pbcopy<CR><CR>
+nmap <Leader>y :w !pbcopy<CR><CR>
+nmap <Leader>p :r !pbpaste<CR><CR>
+
+" 全选复制
+map <C-A> ggVG"+y
+
+" 上移或下移一行
+nnoremap <C-j> :m .+1<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => pathogen 
+ """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+execute pathogen#infect()
+filetype plugin indent on
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Vundle & Plugins
+ """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype off                  " required
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'mzlogin/vim-markdown-toc'
+Plugin 'altercation/vim-colors-solarized'
+"Plugin 'dbgx/lldb.nvim'
+Plugin 'Svtter/ACM.vim'
+Plugin 'scrooloose/nerdcommenter'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-markdown 
+let g:vim_markdown_folding_disabled = 1
+
+" vim-instant-markdown 
+" vim-instant-markdown 不能使用vundle安装，只能使用npm手动安装
+set shell=bash\ -i
+
+"solarized theme
+syntax enable
+set background=dark
+"set background=light
+colorscheme solarized
+
+" lldb.nvim
+"set rtp+=/path/to/lldb.nvim
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim-plug
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+ 
+if empty(glob('~/.vim/autoload/plug.vim'))
+  	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+	  \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
+
+Plug 'dbgx/lldb.nvim'
+Plug 'scrooloose/nerdtree'
+
+" lldb.nvim
+set rtp+=/path/to/lldb.nvim
+
+" nerdtree
+map <C-n> :NERDTreeToggle<CR>
+
+
+" Initialize plugin system
+call plug#end()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => ACM配置 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" 一键编译
+nmap <F5> :call Run()<CR>
+func! Run()
+	exec "w"
+	exec "!clang++ -Wall % -o %<"
+	exec "!./%<"
+endfunc
+
+"自动生成并打开.in文件， 方便放入输入数据。
+nmap<F2> : vs %<.in <CR> 
+"直接运行java程序并读入.in中的数据
+nmap<F4> : !clear && time java %< < %<.in <CR>
+"直接运行c++程序并读入.in中的数据
+"nmap<F5> : !clear && time ./%< < %<.in <CR>  
+
+" 打开.out
+nmap<F6> : vs %<.out <CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => 括号自动补全
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {<CR>}<ESC>O
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+
+function ClosePair(char)
+  if getline('.')[col('.') - 1] == a:char
+      return "\<Right>"
+  else
+      return a:char
+  endif
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => 一键补全ACM刷题头文件
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+map <F12> :call SetAcmTitle()<CR>
+func SetAcmTitle()
+let l = 0
+let l = l + 1 | call setline(l,'/************************************************')
+let l = l + 1 | call setline(l,'* Author        : jumpingfrog0')
+let l = l + 1 | call setline(l,'* Created Time  : '.strftime('%Y/%m/%d'))
+let l = l + 1 | call setline(l,'* File Name     : '.expand('%'))
+let l = l + 1 | call setline(l,'*************************************************/')
+let l = l + 1 | call setline(l,'')
+
+let l = l + 1 | call setline(l,'#include <iostream>')
+let l = l + 1 | call setline(l,'#include <cstdio>')
+let l = l + 1 | call setline(l,'#include <cstring>')
+let l = l + 1 | call setline(l,'#include <algorithm>')
+let l = l + 1 | call setline(l,'#include <string>')
+let l = l + 1 | call setline(l,'#include <cmath>')
+let l = l + 1 | call setline(l,'#include <cstdlib>')
+let l = l + 1 | call setline(l,'#include <vector>')
+let l = l + 1 | call setline(l,'#include <queue>')
+let l = l + 1 | call setline(l,'#include <set>')
+let l = l + 1 | call setline(l,'#include <map>')
+let l = l + 1 | call setline(l,'')
+let l = l + 1 | call setline(l,'using namespace std;')
+let l = l + 1 | call setline(l,'')
+let l = l + 1 | call setline(l,'int main()')
+let l = l + 1 | call setline(l,'{')
+let l = l + 1 | call setline(l,'	//freopen("in.txt","r",stdin);')
+let l = l + 1 | call setline(l,'	//freopen("out.txt","w",stdout);')
+let l = l + 1 | call setline(l,'    ')
+let l = l + 1 | call setline(l,'    return 0;')
+let l = l + 1 | call setline(l,'}')
+endfunc
+
