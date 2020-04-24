@@ -62,6 +62,11 @@ function install_ss_manager() {
 	npm i -g shadowsocks-manager
 }
 
+function install_telnet() {
+    echo "Trying to install telnet..."
+	brew install telnet
+}
+
 #install_homebrew
 #brew install telnet
 #install_vim_plugin_managers
@@ -70,4 +75,5 @@ function install_ss_manager() {
 #install_iStats
 #install_gnu_sed
 #install_node
-install_ss_manager
+#install_ss_manager
+install_telnet
