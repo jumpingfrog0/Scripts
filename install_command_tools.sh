@@ -50,10 +50,24 @@ function install_gnu_sed() {
  export PATH=\"/usr/local/opt/gnu-sed/libexec/gnubin:$PATH\"' ~/.zshrc
 }
 
+function install_node() {
+    # node
+    echo "Trying to install node..."
+    brew install node
+}
+
+function install_ss_manager() {
+    # shadowsocks-manager
+    echo "Trying to install shadowsocks-manager..."
+	npm i -g shadowsocks-manager
+}
+
 #install_homebrew
 #brew install telnet
 #install_vim_plugin_managers
 #install_autojump
 #install_tree
 #install_iStats
-install_gnu_sed
+#install_gnu_sed
+#install_node
+install_ss_manager

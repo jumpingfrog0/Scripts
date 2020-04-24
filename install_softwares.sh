@@ -19,7 +19,7 @@ echo "${installed_list}"
 
 install shiftit
 install iterm2
-#install macdown
+install macdown
 install visual-studio-code
 install sourcetree
 install postman
