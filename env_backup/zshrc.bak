@@ -112,3 +112,16 @@ export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 
 # java home
 # export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+
+# Shadowsocks Proxy
+#export http_proxy=http://127.0.0.1:1087
+#export https_proxy=http://127.0.0.1:1087
+
+# ShadowsocksR Proxy
+#export all_proxy=socks5://127.0.0.1:1086
+
+# Add fastlane to PATH for scripting.
+# export PATH="$HOME/.fastlane/bin:$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
