@@ -24,3 +24,14 @@ func! Compile()
     exec "w"
     exec "!g++ -O2 -std=gnu++17 -lm % -g -o %< -fsanitize=undefined -Wall -Wextra -Wshadow -Wno-unused-result"
 endfunc
+
+map <F12> :call SetAcmTitle()<CR>
+func! SetAcmTitle()
+let l = 0
+let l = l + 1 | call setline(l,'/************************************************')
+let l = l + 1 | call setline(l,'* Author        : jumpingfrog0')
+let l = l + 1 | call setline(l,'* Created Time  : '.strftime('%Y/%m/%d'))
+let l = l + 1 | call setline(l,'* File Name     : '.expand('%'))
+let l = l + 1 | call setline(l,'*************************************************/')
+let l = l + 1 | call setline(l,'')
+endfunc
