@@ -2,23 +2,27 @@
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax on				" 语法高亮
-filetype plugin on		" 根据不同的文件类型语言加载不同插件（如，C++ 的语法高亮插件与python的不同）
+filetype plugin indent on		" 根据不同的文件类型语言加载不同插件（如，C++ 的语法高亮插件与python的不同）
 
 set nocompatible        " 关闭兼容模式 
 set number              " 显示行号
+set relativenumber      " 将行号变成相对当前行的方式来显示
 set autoindent          " 自动对齐
 set smartindent         " 智能对齐
 set showmatch           " 括号匹配模式
 set ruler               " 显示状态行
 set incsearch           " 查询时非常方便，如要查找book单词，当输入到/b时，会自动找到   第一个b开头的单词，当输入到/bo时，会自动找到第一个bo开头的单词，依次类推，进行查找时，使用此设置会快速找到答案，当你找要匹配的单词时，别忘记回车.
+set hlsearch            " 搜索高亮显示
+set showcmd             " 显示当前键入的命令
 
 set cindent             " C语言格式对齐
 set nobackup            " 不要备份文件
 set clipboard+=unnamed	" 共享剪贴板
 
 " 1 tab == 4 spaces
-set tabstop=4
+set softtabstop=4
 set shiftwidth=4
+set expandtab
 
 " 高亮显示当前行/列
 set cursorline			
@@ -129,24 +133,31 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => ACM配置 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"自动生成并打开.in文件， 方便放入输入数据。
+nmap <F2> : vs %<.in <CR>
+" 打开.out文件
+nmap <F3> : vs %<.out <CR>
 
-" 一键编译
-nmap <F5> :call Run()<CR>
+" 一键运行
+nmap <F5> :!clear && ./%< <CR>
+" 一键运行，清空屏幕, 运行, 从.in读取输入数据，输出到.out文件
+nmap <F6> :!clear && ./%< < %<.in > %<.out <CR>
+
+" 一键编译运行程序
+nmap <F8> :call Run()<CR>
 func! Run()
-	exec "w"
-	exec "!clang++ -Wall % -o %<"
-	exec "!./%<"
+    exec "w"
+    exec "!clear"
+    exec "!g++ -Wall % -o %<"
+    exec "!./%<"
 endfunc
 
-"自动生成并打开.in文件， 方便放入输入数据。
-nmap<F2> : vs %<.in <CR> 
-"直接运行java程序并读入.in中的数据
-nmap<F4> : !clear && time java %< < %<.in <CR>
-"直接运行c++程序并读入.in中的数据
-"nmap<F5> : !clear && time ./%< < %<.in <CR>  
-
-" 打开.out
-nmap<F6> : vs %<.out <CR>
+" 一键编译
+nmap <F9> :call Compile() <CR>
+func! Compile()
+    exec "w"
+    exec "!g++ -O2 -std=gnu++17 -lm % -g -o %< -fsanitize=undefined -Wall -Wextra -Wshadow -Wno-unused-result"
+endfunc
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => 括号自动补全
@@ -204,4 +215,3 @@ let l = l + 1 | call setline(l,'    ')
 let l = l + 1 | call setline(l,'    return 0;')
 let l = l + 1 | call setline(l,'}')
 endfunc
-

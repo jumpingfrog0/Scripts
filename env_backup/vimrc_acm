@@ -1,0 +1,26 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => ACM配置 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+sy on
+set sw=4 sts=4 et nu sc hls rnu
+filetype plugin indent on
+
+nmap <F2> : vs %<.in <CR>
+nmap <F3> : vs %<.out <CR>
+
+nmap <F5> :!clear && ./%< <CR>
+nmap <F6> :!clear && ./%< < %<.in > %<.out <CR>
+
+nmap <F8> :call Run()<CR>
+func! Run()
+    exec "w"
+    exec "!clear"
+    exec "!g++ -Wall % -o %<"
+    exec "!./%<"
+endfunc
+
+nmap <F9> :call Compile()<CR>
+func! Compile()
+    exec "w"
+    exec "!g++ -O2 -std=gnu++17 -lm % -g -o %< -fsanitize=undefined -Wall -Wextra -Wshadow -Wno-unused-result"
+endfunc
