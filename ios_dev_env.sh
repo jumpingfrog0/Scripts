@@ -22,7 +22,12 @@ function InstallHomebrew() {
     if [ ! `which brew` ]
     then
 	echo 'Homebrew not found. Trying to install Homebrew...'
-    	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        # 国外的源被墙了
+    	#/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+     
+        # 使用国内的源
+        /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+
 	brew tap caskroom/cask
     fi
 }
@@ -37,7 +42,7 @@ function RunBundleInstall() {
     echo 'Gemfile initialing...'ruby
 	cat > ${gemfile_path}<<EOF
 source "https://rubygems.org"
-gem 'cocoapods', '~> 1.9.0'
+gem 'cocoapods', '~> 1.10.1'
 # gem 'fastlane', '~> 2.38.1'
 EOF
 
@@ -62,16 +67,16 @@ echo "请确保Xcode已经安装且获取了 license"
 
 InstallHomebrew
 
-#InstallRvm
+InstallRvm
 
-#InstallRuby
-#InstallBundler
+InstallRuby
+InstallBundler
 
-#RunBundleInstall
+RunBundleInstall
 
 # todo: 以上工具检查是否安装
 # todo: 检查 zsh 是否安装
-#InstallZSH
+InstallZSH
 
 ##########################################################################
 

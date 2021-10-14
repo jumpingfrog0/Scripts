@@ -1,0 +1,21 @@
+#!/bin/sh
+export PATH=/usr/local/bin:$PATH
+
+currentUser=`git config user.name`
+current_repo_path=$(git rev-parse --show-toplevel)
+pyshell=${current_repo_path}/Scripts/hook_git_commit.py
+gitbranch=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`
+
+while read local_ref local_sha remote_ref remote_sha
+do
+	commitIds=`git rev-list "$remote_sha..$local_sha"`
+	arr=(${commitIds// /})
+	commitCount=${#arr[@]}
+	for commitId in "${arr[@]}"
+	do
+    	commitMsg=`git log --format=%B -n 1 "$commitId"`
+		python3 ${pyshell} "$commitId" "$commitMsg" "$currentUser" "$gitbranch" "$commitCount"
+	done
+done
+
+exit 0
