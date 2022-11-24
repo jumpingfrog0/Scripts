@@ -6,18 +6,6 @@
 
 ############################   Functions   ###############################
 
-function InstallRvm() {
-    # Must install homebrew befroe rvm
-    \curl -sSL https://get.rvm.io | bash -s stable --ruby
-    source ~/.rvm/scripts/rvm
-}
-
-function InstallRuby() {
-    rvm install 2.7.1
-    rvm use 2.7.1
-    rvm list
-}
-
 function InstallHomebrew() {
     if [ ! `which brew` ]
     then
@@ -29,7 +17,21 @@ function InstallHomebrew() {
         /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 
 	brew tap caskroom/cask
+    source ~/.zprofile
     fi
+}
+
+function InstallRvm() {
+    # Must install homebrew befroe rvm
+    sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby
+    source ~/.rvm/scripts/rvm
+}
+
+function InstallRuby() {
+    rvm install 3.0.0
+    rvm use 3.0.0
+    rvm --default use 3.0.0
+    rvm list
 }
 
 function InstallBundler() {
@@ -38,14 +40,16 @@ function InstallBundler() {
 
 function RunBundleInstall() {
     # 将配置写入Gemfile
+    mkdir "${HOME}/Documents/dev/"
     gemfile_path="${HOME}/Documents/dev/Gemfile"
-    echo 'Gemfile initialing...'ruby
+    echo 'Gemfile writing...'
+    echo '' >> ${gemfile_path}
 	cat > ${gemfile_path}<<EOF
 source "https://rubygems.org"
-gem 'cocoapods', '~> 1.10.1'
-# gem 'fastlane', '~> 2.38.1'
+gem 'cocoapods', '~> 1.11.3'
 EOF
 
+    echo 'bundle installing...'
     # bundle install
     current_dir=$PWD
     cd $HOME/Documents/dev
@@ -53,10 +57,8 @@ EOF
     cd ${current_dir}
 }
 
-function InstallZSH() {
-
-    # oh-my-zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+function PodSetup() {
+    pod setup
 }
 
 ##########################################################################
@@ -64,19 +66,14 @@ function InstallZSH() {
 ############################   Run scripts   #############################
 
 echo "请确保Xcode已经安装且获取了 license"
+echo "请不要用su命令，安装 brew 不建议使用root权限"
 
-InstallHomebrew
-
+#InstallHomebrew
 InstallRvm
-
 InstallRuby
-InstallBundler
-
-RunBundleInstall
-
-# todo: 以上工具检查是否安装
-# todo: 检查 zsh 是否安装
-InstallZSH
+#InstallBundler
+#RunBundleInstall
+#PodSetup
 
 ##########################################################################
 

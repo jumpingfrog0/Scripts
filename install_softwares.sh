@@ -5,21 +5,21 @@
 ###
 
 function install() {
-	is_installed="$(brew cask list | grep -E -i $1)"
+	is_installed="$(brew list cask | grep -E -i $1)"
 	if [[ ! -z "${is_installed}" ]]; then
 		echo "Info: '$1' have been installed."
 	else
 		echo "Installing $1..."
-		brew cask install $1	
+		brew install --cask $1
 	fi
 }
 
-installed_list="$(brew cask list)"
+installed_list="$(brew list --cask)"
 echo "${installed_list}"
 
 install shiftit
 install iterm2
-install macdown
+#install macdown
 install visual-studio-code
 install sourcetree
 install postman
@@ -28,7 +28,7 @@ install postman
 #install dash
 
 # alfred need to hack
-# brew cask install alfred
+#brew install alfred --cask
 
 #is_installed=`brew cask install sourcetree | grep -q -E -i "error"`
 #if [[ ! -z ${is_installed} ]]; then
