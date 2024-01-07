@@ -8,9 +8,9 @@ g_linkmap_path = './solomix-LinkMap-normal-arm64.txt'
 g_classname_pre = ['MB']
 g_add_method_pre = 'sxfunc_'
 g_add_method_suf = '_sxmethod'
-g_ignore_dirs = ['Pods','UnUsedFiles','ThirdParty','Resource','LibTool','LibThird','TiBeauty','klcAssets.xcassets','framework','.gitignore','.git']
-g_ignore_header_dirs = ['Pods','ThirdParty','LibTool','ThirdPay']
-g_ignore_rename_dires = ['Pods','UnUsedFiles','ThirdParty','Resource','LibTool','LibThird','TiBeauty','klcAssets.xcassets','framework','.git']
+g_ignore_dirs = ['Pods','LocalPods','UnUsedFiles','Scripts','ThirdParty','Resource','LibTool','LibThird','TiBeauty','klcAssets.xcassets','framework','.gitignore','.git']
+g_ignore_header_dirs = ['Pods','LocalPods','Scripts','ThirdParty','LibTool','ThirdPay']
+g_ignore_rename_dires = ['Pods','LocalPods','UnUsedFiles','Scripts','ThirdParty','Resource','LibTool','LibThird','TiBeauty','klcAssets.xcassets','framework','.git']
 g_ignore_method_pre = [g_add_method_pre]
 g_ios_publicapi_path = ['/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks',
 '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/objc']
