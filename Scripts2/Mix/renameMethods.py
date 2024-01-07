@@ -30,9 +30,9 @@ def findAllTargetClasses():
     allFilePaths = fileObject.allSrcFilePath_2(g_ignore_dirs, ['.m'])
 
     # print(len(allFilePaths))
-    # f = open('./renameMethods_AllClassPaths.txt', 'w+')
-    # f.write('\n'.join(allFilePaths))
-    # f.close()
+    f = open('./renameMethods_AllClassPaths.txt', 'w+')
+    f.write('\n'.join(allFilePaths))
+    f.close()
 
     targetClasses = []
     for filePath in allFilePaths:
@@ -40,16 +40,11 @@ def findAllTargetClasses():
         fileName = os.path.basename(filePath)
         fileClass = os.path.splitext(fileName)[0]
         targetClasses.append(fileClass)
-        # for classPre in g_classname_pre:
-        #     if fileName.startswith(classPre):
-        #         fileClass = os.path.splitext(fileName)[0]
-        #         targetClasses.append(fileClass)
-        #         print(fileClass)
 
     print(len(targetClasses))
-    # f = open('./renameMethods_AllClasses.txt', 'w+')
-    # f.write('\n'.join(targetClasses))
-    # f.close()
+    f = open('./renameMethods_AllClasses.txt', 'w+')
+    f.write('\n'.join(targetClasses))
+    f.close()
     return targetClasses
 
 def findAllSystemPublicApis():
@@ -70,9 +65,6 @@ def findAllSystemPublicApis():
                     if methodName not in g_all_public_apis:
                         g_all_public_apis.append(methodName)
                         # print(methodName)
-                        # print('method----' + method + '\n')
-                        # print(matchObj)
-                        # print('methodName----' + methodName + '\n')
 
             f.close()
     # print(len(g_all_public_apis))
@@ -84,9 +76,9 @@ def findAllIgnoreMethods():
     print('start to find ignore header files...')
     filePaths = fileObject.allIncludeSrcFilePath_2(g_ignore_header_dirs, ['.h', '.m', '.mm'])
 
-    # f = open('./renameMethods_ignoreFiles.txt', 'w+')
-    # f.write('\n'.join(filePaths))
-    # f.close()
+    f = open('./renameMethods_ignoreFiles.txt', 'w+')
+    f.write('\n'.join(filePaths))
+    f.close()
 
     print(len(filePaths))
 
@@ -120,9 +112,9 @@ def findAllIgnoreMethods():
 
         f.close()
 
-    # f = open('./renameMethods_ignoreHeaderMethods.txt', 'w+')
-    # f.write('\n'.join(g_ignore_header_methods))
-    # f.close()
+    f = open('./renameMethods_ignoreHeaderMethods.txt', 'w+')
+    f.write('\n'.join(g_ignore_header_methods))
+    f.close()
 
     print(len(g_ignore_header_methods))
 
@@ -172,9 +164,6 @@ def findAllMethods():
             if ':' in methodName:
                 firstMethodName = methodName.split(':')[0].strip() + ':'
 
-            # if className == 'ChatInputView':
-            #     print('-----' + className + ' ' + methodName + ' ' + firstMethodName)
-
             if className in allTargetClasses:
                 if isNeededMethod(methodName, classFile):
                     # if className == 'ChatInputView' and methodName == 'createChatView':
@@ -183,8 +172,6 @@ def findAllMethods():
                         allMethods.append(firstMethodName)
                         # print(className + '->' + firstMethodName)
                 else:
-                    # if className == 'ChatInputView' and methodName == 'createChatView':
-                    #     print('-----2-----')
                     if firstMethodName in allMethods:
                         # print("remove methods >>>> "+methodName)
                         allMethods.remove(firstMethodName)
@@ -306,7 +293,6 @@ def renameMethods():
                     rule6 = '[ \t]'+method        #  method
                     rule = r''+rule1+'|'+rule2+'|'+rule3+'|'+rule4+'|'+rule5+'|'+rule6
                 else:
-                    # print("void param func:",method)
                     #\(\w+\)fetchRoomUserInfo\s|\) *fetchRoomUserInfo *]| *fetchRoomUserInfo *]
                     rule1 = '[-+] *\(\w+\)'+method+'[\s;]'      # - (returnType)method;
                     rule2 = '\)[ \t]*'+method+' *]'                 # ) method]
@@ -317,7 +303,6 @@ def renameMethods():
 
                 results = re.findall(rule,newLines,re.MULTILINE)
                 for text in results:
-                    # print(">>>>"+text)
                     newText = text.replace(method, replacedName)
                     newLines = newLines.replace(text, newText)
 
@@ -328,22 +313,13 @@ def renameMethods():
             print(filePath)
         
 def replacedMethodName(methodName):
-    # if ':' not in methodName:
-    #     return (g_add_method_pre + methodName + g_add_method_suf)
-    # else:
-    #     tempName = methodName.replace(':', '')
-    #     return (g_add_method_pre + tempName + g_add_method_suf + ':')
-
     midText = methodName
     if len(methodName) > 5:
         midIndex = int(len(methodName)/2)
         strArr = list(methodName)
         strArr.insert(midIndex, 'SOLOMIX')
         midText = ''.join(strArr)
-    # for pre in g_ori_method_pre:
-    #     if midText.startswith(pre):
-    #         midText = midText[len(pre):]
-    #         break
+
     if ':' not in methodName:
         return (g_add_method_pre + midText + g_add_method_suf)
     else:

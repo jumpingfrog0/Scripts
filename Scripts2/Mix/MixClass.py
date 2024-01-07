@@ -202,9 +202,8 @@ def renameMixClass():
     # ff.close()
     
     for filePath in allFilePaths:
-        # print('正在处理 ', filePath)
+        print('正在处理 ', filePath)
         fileName = os.path.basename(filePath)
-        # fileClassName = os.path.splitext(fileName)[0]
         f = open(filePath, 'rb')
         allLines = f.read()
         allLines = allLines.decode('utf-8', 'ignore')
@@ -225,9 +224,9 @@ def renameMixClass():
             f = open(filePath, 'w+')
             f.write(newAllLines)
             f.close()
-            if mixClassName == 'SXApdaterBadgeTitlePeipei':
-                print('----' + filePath)
-                print(oriClassName + mixClassName)
+            # if mixClassName == 'SXApdaterBadgeTitlePeipei':
+            #     print('----' + filePath)
+            #     print(oriClassName + mixClassName)
 
         if mixFilePath != filePath:
             log = filePath + ' -> ' + mixFilePath
@@ -244,7 +243,6 @@ def readKeyWords():
     allText = f.read()
     global g_all_words;
     g_all_words = allText.split(',')
-    # print(g_all_words)
 
 def randomWord(count):
     result = ''
@@ -274,7 +272,6 @@ def handleSpecialLogic():
 
     key = 'KLCAppConfig'
     val = g_all_mix_class_map[key]
-    # val = 'SXPressInvited1v1'
     newAllLines = newAllLines.replace(key, val)
 
     if newAllLines != allLines:
