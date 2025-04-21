@@ -90,15 +90,12 @@ function install_telnet() {
 }
 
 # required
-install_zsh
-#install_homebrew
-#install_homebrew_cask
-install_vim_plugin_managers
 install_autojump
 install_tree
-install_iStats
-install_node
-install_telnet
+#install_vim_plugin_managers
+#install_iStats
+#install_node
+#install_telnet
 
 # option
 #install_gnu_sed

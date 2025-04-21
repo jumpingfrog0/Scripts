@@ -19,10 +19,9 @@ echo "${installed_list}"
 
 install shiftit
 install iterm2
-#install macdown
-install visual-studio-code
 install sourcetree
-install postman
+#install postman
+#install visual-studio-code
 
 # 需要破解版
 #install dash
