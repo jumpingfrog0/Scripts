@@ -1,0 +1,2 @@
+# 添加到 ~/.zshrc 或 ~/.bash_profile
+alias brew-source='echo "=== Brew源 ===" && cd "$(brew --repo)" && git remote -v && echo "\n=== Core源 ===" && cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core" && git remote -v && echo "\n=== Cask源 ===" && cd "$(brew --repo)/Library/Taps/homebrew/homebrew-cask" 2>/dev/null && git remote -v || echo "homebrew-cask未安装"'
