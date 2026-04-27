@@ -1,0 +1,22 @@
+1.Windows IPv6地址变化飞书通知自动化任务：
+
+创建任务：
+schtasks /create /tn "IPv6Monitor_PeriodicCheck" /tr "C:\Python313\python.exe D:\AutoScripts\ipv6_monitor\ipv6_feishu_monitor.py" /sc minute /mo 5 /ru SYSTEM /rl HIGHEST /f
+
+删除任务：
+schtasks /delete /tn "IPv6Monitor_PeriodicCheck" /f
+
+触发任务：
+schtasks /run /tn "IPv6Monitor_PeriodicCheck"
+schtasks /run /tn "IPv6Monitor_SystemStartup"
+
+任务计划程序：按下 `Win + R`，输入 `taskschd.msc`
+
+
+2.Hyper-V 硬盘直通：
+
+cd D:\AutoScripts\DiskPassthrough
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+.\Run-DiskPassthrough.ps1

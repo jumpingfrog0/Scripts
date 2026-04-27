@@ -1,0 +1,42 @@
+[
+  {
+    "address": "::1",
+    "interface": null,
+    "source": "socket.getaddrinfo",
+    "type": "loopback",
+    "is_permanent": true,
+    "is_temporary": false,
+    "is_eui64": false,
+    "entropy": null,
+    "confidence": 1.0,
+    "reasons": []
+  },
+  {
+    "address": "fe80::1",
+    "interface": null,
+    "source": "socket.getaddrinfo",
+    "type": "link_local",
+    "is_permanent": true,
+    "is_temporary": false,
+    "is_eui64": false,
+    "entropy": 2.32,
+    "confidence": 0.7,
+    "reasons": [
+      "链路本地地址通常是永久的"
+    ]
+  },
+  {
+    "address": "fe80::8f6:3dbd:d3bd:e589",
+    "interface": null,
+    "source": "socket.getaddrinfo",
+    "type": "link_local",
+    "is_permanent": true,
+    "is_temporary": false,
+    "is_eui64": false,
+    "entropy": 3.16,
+    "confidence": 0.7,
+    "reasons": [
+      "链路本地地址通常是永久的"
+    ]
+  }
+]
