@@ -159,6 +159,10 @@ def main():
 
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 当前IP: {current_ip}, 上次IP: {last_ip}")
 
+    if current_ip == last_ip:
+        print("IP地址未变化，无需发送通知")
+        return
+
     # 如果IP地址发生变化（包括从无到有，从有到无）
     print("检测到IP变化，准备发送通知...")
     if send_feishu_notification(hostname, last_ip, current_ip):
