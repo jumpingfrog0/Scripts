@@ -14,6 +14,12 @@ The scripts for installing development environment、some command tools、some c
 
 // todo...
 
+### tokendash
+
+Local TokenDash fork helpers live in [`tokendash/`](tokendash/).
+
+Use `tokendash/setup-tokendash-dev-aliases.sh` to install `build-tokendash-dev` and `tokendash-dev` aliases. This lets a local fork run through `tokendash-dev` while the globally installed `tokendash` command remains unchanged.
+
 ### shadowsocks-all.sh
 
 这个是 [@秋水逸冰](https://teddysun.com/)的一键安装脚本
