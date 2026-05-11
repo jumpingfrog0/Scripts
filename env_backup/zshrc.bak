@@ -114,10 +114,10 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 # RVM manual script for loading rvm to shell
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 
 # autojump configuration
-[[ -s /opt/homebrew/etc/autojump.sh ]] && . /opt/homebrew/etc/autojump.sh
+#[[ -s /opt/homebrew/etc/autojump.sh ]] && . /opt/homebrew/etc/autojump.sh
 
 # oh-my-zsh theme: pure
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
@@ -146,18 +146,33 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # java home
 # export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
 
-# Shadowsocks Proxy
-#export http_proxy=http://127.0.0.1:1087
-#export https_proxy=http://127.0.0.1:1087
-
-# ShadowsocksR Proxy
-#export all_proxy=socks5://127.0.0.1:1086
-
 # Add fastlane to PATH for scripting.
 # export PATH="$HOME/.fastlane/bin:$PATH"
 
 # llvm
 #export PATH="/usr/local/opt/llvm/bin:$PATH"
 
+# iwyu
+#export PATH="$HOME/Documents/dev/iwyu/bin:$PATH"
+
 # ccache
 #export CCACHE_LOGFILE="$HOME/Desktop/CCache.log"
+
+# flutter
+#export PATH=$PATH:"$HOME/fvm/versions/stable/bin"
+
+# pyenv
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/shims:$PATH"
+#if command -v pyenv 1>/dev/null 2>&1; then
+# eval "$(pyenv init -)"
+#fi
+
+# tailscale
+#alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
+
+#export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
+#export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+#export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
+
+#export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
