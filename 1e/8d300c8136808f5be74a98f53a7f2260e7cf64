@@ -1,0 +1,25 @@
+mac_dev_env_init.sh
+  s_d5fd52f195436f::t_055b57272b51d8 32,37-40,61,67,75,80,85,92,97,99,122-123
+  s_d5fd52f195436f::t_dc410966d4d403 13,134-148,150,189-192
+  s_d5fd52f195436f::t_c2fc33eb182047 14,20,132,151-156,193-196
+  s_d5fd52f195436f::t_4f12abec49fd95 133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1e8d300c8136808f5be74a98f53a7f2260e7cf64",
+  "prompts": {},
+  "logical_commit_id": "1e8d300c8136808f5be74a98f53a7f2260e7cf64",
+  "sessions": {
+    "s_d5fd52f195436f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f7cd-4cd0-7fb0-adf8-bc8b3420c6e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "huangdonghong3 <huangdonghong3@joyy.com>",
+      "total_additions": 49,
+      "total_deletions": 39
+    }
+  }
+}
