@@ -10,11 +10,14 @@ INSTALL_RBENV=true
 INSTALL_NVM=true
 INSTALL_RUBY=true
 INSTALL_NODE=true
+INSTALL_PYENV=true
+INSTALL_PYTHON=true
 
 # 指定要安装的版本。
 RUBY_VERSION="3.3.2"
 NODE_VERSION="25.9.0"
 NVM_VERSION="v0.40.8"
+PYTHON_VERSION="3.8.9"
 
 # 安装失败时停止，避免继续写入未成功安装工具的配置。
 set -e
@@ -22,33 +25,19 @@ set -e
 ZSH_CONFIG_DIR="${ZDOTDIR:-$HOME}"
 ZSH_RC="$ZSH_CONFIG_DIR/.zshrc"
 ZSH_PROFILE="$ZSH_CONFIG_DIR/.zprofile"
-HOMEBREW_BIN="/opt/homebrew/bin/brew"
-RBENV_BIN="/opt/homebrew/bin/rbenv"
 export NVM_DIR="$HOME/.nvm"
-
-# 仅使用 Apple Silicon 的 Homebrew 安装位置。
-function setup_homebrew() {
-    local brew_environment
-    if [ ! -x "$HOMEBREW_BIN" ]; then
-        echo "未找到 $HOMEBREW_BIN，请将 INSTALL_HOMEBREW 设为 true 或先手动安装。" >&2
-        return 1
-    fi
-
-    # 官方建议显式指定 shell；配置写入 macOS Zsh 的登录启动文件。
-    brew_environment="$("$HOMEBREW_BIN" shellenv bash)"
-    eval "$brew_environment"
-    mkdir -p "$ZSH_CONFIG_DIR"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$ZSH_PROFILE"
-}
 
 # https://brew.sh/
 function install_homebrew() {
-    if [ ! -x "$HOMEBREW_BIN" ]; then
+    if [ ! -x /opt/homebrew/bin/brew ]; then
         echo "Trying to install Homebrew..."
         local installer
         installer="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         /bin/bash -c "$installer"
-        setup_homebrew
+        # 安装后加载环境，后续即可直接使用 brew。
+        eval "$(/opt/homebrew/bin/brew shellenv bash)"
+        mkdir -p "$ZSH_CONFIG_DIR"
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> "$ZSH_PROFILE"
     else
         echo "Homebrew is already installed."
     fi
@@ -69,13 +58,13 @@ function install_oh_my_zsh() {
 
 # https://formulae.brew.sh/formula/autojump
 function install_autojump() {
-    if "$HOMEBREW_BIN" list --formula autojump >/dev/null 2>&1; then
+    if brew list --formula autojump >/dev/null 2>&1; then
         echo "autojump is already installed."
         return 0
     fi
 
     echo "Trying to install autojump..."
-    "$HOMEBREW_BIN" install autojump
+    brew install autojump
     mkdir -p "$ZSH_CONFIG_DIR"
     echo '[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh' >> "$ZSH_RC"
 }
@@ -83,31 +72,31 @@ function install_autojump() {
 # https://formulae.brew.sh/formula/tree
 function install_tree() {
     echo "Trying to install tree..."
-    "$HOMEBREW_BIN" install tree
+    brew install tree
 }
 
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 function install_zsh_syntax_highlighting() {
-    if "$HOMEBREW_BIN" list --formula zsh-syntax-highlighting >/dev/null 2>&1; then
+    if brew list --formula zsh-syntax-highlighting >/dev/null 2>&1; then
         echo "zsh-syntax-highlighting is already installed."
         return 0
     fi
 
-    "$HOMEBREW_BIN" install zsh-syntax-highlighting
+    brew install zsh-syntax-highlighting
     mkdir -p "$ZSH_CONFIG_DIR"
     echo 'source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> "$ZSH_RC"
 }
 
 # https://github.com/rbenv/rbenv#installation
 function install_rbenv() {
-    if "$HOMEBREW_BIN" list --formula rbenv >/dev/null 2>&1; then
+    if brew list --formula rbenv >/dev/null 2>&1; then
         echo "rbenv is already installed."
         return 0
     fi
 
-    "$HOMEBREW_BIN" install rbenv
+    brew install rbenv
     mkdir -p "$ZSH_CONFIG_DIR"
-    echo 'eval "$(/opt/homebrew/bin/rbenv init - zsh)"' >> "$ZSH_RC"
+    echo 'eval "$(rbenv init - zsh)"' >> "$ZSH_RC"
 }
 
 # https://github.com/nvm-sh/nvm#installing-and-updating
@@ -129,27 +118,40 @@ function install_nvm() {
 
 # https://github.com/rbenv/rbenv#installing-ruby-versions
 function install_ruby() {
-    if [ ! -x "$RBENV_BIN" ]; then
-        echo "未找到 rbenv，请将 INSTALL_RBENV 设为 true 或先手动安装。" >&2
-        return 1
-    fi
-
     # -s 跳过已安装版本；设为用户默认版本，不修改项目 .ruby-version。
-    "$RBENV_BIN" install -s "$RUBY_VERSION"
-    "$RBENV_BIN" global "$RUBY_VERSION"
+    rbenv install -s "$RUBY_VERSION"
+    rbenv global "$RUBY_VERSION"
 }
 
 # https://github.com/nvm-sh/nvm#usage
 function install_node() {
-    if [ ! -s "$NVM_DIR/nvm.sh" ]; then
-        echo "未找到 nvm，请将 INSTALL_NVM 设为 true 或先手动安装。" >&2
-        return 1
-    fi
-
     # 当前脚本直接加载 nvm，无需 source 用户的整个 .zshrc。
     . "$NVM_DIR/nvm.sh" --no-use
     nvm install "$NODE_VERSION"
     nvm alias default "$NODE_VERSION"
+}
+
+function install_pyenv() {
+    if brew list --formula pyenv >/dev/null 2>&1; then
+        echo "pyenv is already installed."
+        return 0
+    fi
+
+    brew install pyenv
+    mkdir -p "$ZSH_CONFIG_DIR"
+    cat >> "$ZSH_RC" <<'EOF'
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/shims:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+EOF
+}
+
+function install_python() {
+    # -s 跳过已安装版本；设为用户默认版本。
+    pyenv install -s "$PYTHON_VERSION"
+    pyenv global "$PYTHON_VERSION"
 }
 
 function main() {
@@ -184,6 +186,14 @@ function main() {
 
     if [ "$INSTALL_NODE" = true ]; then
         install_node
+    fi
+
+    if [ "$INSTALL_PYENV" = true ]; then
+        install_pyenv
+    fi
+
+    if [ "$INSTALL_PYTHON" = true ]; then
+        install_python
     fi
 
     # 官方要求语法高亮在其他插件之后加载，最后追加其配置。
