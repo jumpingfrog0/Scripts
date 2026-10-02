@@ -1,0 +1,35 @@
+mac_dev_env_init.sh
+  s_d5fd52f195436f::t_67a1ae8c92996b 16
+  s_d5fd52f195436f::t_2c87d4d5ef8d5e 31,39,97
+  s_d5fd52f195436f::t_20408975f066ee 51,72-76,91-95
+  s_d5fd52f195436f::t_981f728625921f 108
+  s_d5fd52f195436f::t_d388c3af1cb318 9-12,18,27,99-107,109-137,140-152,171-186
+  s_d5fd52f195436f::t_49f44accc5a47b 15,17,25-26
+  s_d5fd52f195436f::t_8976cacab437a3 87,155-170,187-195,197
+  s_d5fd52f195436f::t_e755e2033be0a0 3-8,13
+  s_d5fd52f195436f::t_04ee5f761ca77d 14,138-139
+  s_d5fd52f195436f::t_506bd0d056f6e3 29,32-33,38,46,78,86,96
+  s_d5fd52f195436f::t_bb9eab34340663 19-24,28,30,34,37,44,47-50,52-53,57-66,70,83,89-90
+  s_d5fd52f195436f::t_e3ba2851eb9706 40-41,79-80,98
+  s_d5fd52f195436f::t_626a1bedc83f84 88
+  s_d5fd52f195436f::t_162f197cacfbd4 154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "412b395f812343dbee86654d3c3677a1ee148ba4",
+  "prompts": {},
+  "logical_commit_id": "412b395f812343dbee86654d3c3677a1ee148ba4",
+  "sessions": {
+    "s_d5fd52f195436f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0f7cd-4cd0-7fb0-adf8-bc8b3420c6e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "huangdonghong3 <huangdonghong3@joyy.com>",
+      "total_additions": 288,
+      "total_deletions": 169
+    }
+  }
+}
